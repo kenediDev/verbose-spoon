@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "lib": ["es5", "es6", "dom", "es2018", "esnext.asynciterable"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "strict": false,
+    "allowJs": true,
+    "resolveJsonModule": true
+  },
+  "include": ["server/**/*.ts", "client/**/*.tsx"],
+  "exclude": ["node_modules", "bower_components"]
+}
