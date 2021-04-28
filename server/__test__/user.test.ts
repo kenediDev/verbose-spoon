@@ -2,6 +2,7 @@ import faker from "faker";
 import { UserEntity } from "../typeorm/entity/UserEntity";
 import { calls } from "../utils-test/setup";
 import { logger, read, write } from "../utils/setup";
+import path from "path";
 
 describe("User", () => {
   test("Create", async (done) => {
@@ -30,7 +31,7 @@ describe("User", () => {
       .then((res) => {
         write({ count: res.body.length, token: read["token"] });
         logger("- User List \n");
-        logger(JSON.stringify(res.body[0]));
+        logger(JSON.stringify(res.body.reverse().slice(0, 4)));
         logger("\n");
         expect(res.body).not.toEqual(null);
         expect(res.body).not.toEqual(undefined);
@@ -85,6 +86,33 @@ describe("User", () => {
           logger("\n");
           expect(res.body).not.toEqual(null);
           expect(res.body).not.toEqual(undefined);
+          return done();
+        });
+    });
+    test("Update Accounts", async (done) => {
+      const call = await calls();
+      call
+        .post("/api/v1/user/accounts/update/")
+        .set("Authorization", `Bearer ${read["token"]}`)
+        .set("Content-Type", "multipart/form-data")
+        .field("first_name", faker.name.firstName())
+        .field("last_name", faker.name.lastName())
+        .field("country", faker.address.country())
+        .field("province", faker.address.state())
+        .field("city", faker.address.city())
+        .field("address", faker.address.streetAddress())
+        .attach(
+          "avatar",
+          path.join(
+            __dirname,
+            "./assets/artworks-oAc2nDPy6JgrX1vf-yw8xyg-t500x500.jpeg"
+          )
+        )
+        .expect(200)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: "Profile has been updated",
+          });
           return done();
         });
     });

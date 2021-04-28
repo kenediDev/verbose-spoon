@@ -3,33 +3,26 @@ import {
   BeforeInsert,
   Column,
   Entity,
-  JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { dbTime } from "../../utils/setup";
-import { CountryEntity } from "./CountryEntity";
 
-@Entity("accounts")
-export class AccountsEntity extends BaseEntity {
+@Entity("country")
+export class CountryEntity extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   readonly id: string;
   @Column("varchar", { nullable: true, length: 225 })
-  avatar: string;
+  country: string;
   @Column("varchar", { nullable: true, length: 225 })
-  first_name: string;
+  city: string;
   @Column("varchar", { nullable: true, length: 225 })
-  last_name: string;
+  province: string;
+  @Column("varchar", { nullable: true, length: 225 })
+  address: string;
   @Column({ type: dbTime, nullable: false })
   createAt: Date;
   @Column({ type: dbTime, nullable: false, onUpdate: "current_timestamp" })
   updateAt: Date;
-  @OneToOne((type) => CountryEntity, {
-    nullable: true,
-    cascade: true,
-  })
-  @JoinColumn()
-  location: CountryEntity;
 
   @BeforeInsert()
   async insertCreateAt() {

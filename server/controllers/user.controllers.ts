@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Res,
+  UploadedFile,
   UseBefore,
 } from "routing-controllers";
 import { Service } from "typedi";
@@ -15,6 +16,7 @@ import { UserService } from "../service/user.service";
 import jwt from "jsonwebtoken";
 import { secretsKey } from "../utils/setup";
 import { UserDecode } from "../types/interface";
+import { Multer_ } from "./utils/multers";
 
 var bodyParser = require("body-parser");
 
@@ -72,5 +74,26 @@ export class UserControllers {
       });
     }
     return res.status(200).json(instance);
+  }
+
+  @HttpCode(200)
+  @Post("accounts/update/")
+  async accounts(
+    @UploadedFile("avatar", {
+      options: new Multer_().upload(),
+    })
+    avatar: any,
+    @Body() body: any,
+    @Res() res: Response,
+    @CurrentUser() user: UserDecode
+  ) {
+    if (!user) {
+      return res.status(400).json(false);
+    }
+    const instance = await this.service.updates(body, avatar, user.user.id);
+    if (instance) {
+      return res.status(400).json({ message: instance });
+    }
+    return res.status(200).json({ message: "Profile has been updated" });
   }
 }

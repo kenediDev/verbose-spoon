@@ -9,3 +9,12 @@ export interface UserDecode {
   };
   ait: string;
 }
+
+export interface Upload {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  buffer: any;
+  size: number;
+}

@@ -11,9 +11,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  if (con) {
-    con.close();
-  }
+  con.close();
 });
 
 export const calls = async (): Promise<SuperTest<Test>> => {

@@ -10,6 +10,7 @@ import {
 import { dbTime } from "../../utils/setup";
 import bcrypt from "bcrypt";
 import { AccountsEntity } from "./AccountsEntity";
+import { CountryEntity } from "./CountryEntity";
 
 @Entity("user")
 export class UserEntity extends BaseEntity {
@@ -29,8 +30,14 @@ export class UserEntity extends BaseEntity {
   @JoinColumn()
   accounts: AccountsEntity;
 
+  async insertCountry() {
+    const country = new CountryEntity();
+    return country.save();
+  }
+
   async insertAccounts() {
     const accounts = new AccountsEntity();
+    accounts.location = await this.insertCountry();
     return accounts.save();
   }
 
